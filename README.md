@@ -9,6 +9,7 @@ To build Dockerfile using docker-compose:
 
 To run application:
 - `docker-compose run <service_name> sh -c <django_or_python_command>"`
+- `docker-compose up`
 
 To create Django App:
 - `docker-compose run app sh -c "django-admin.py startproject <project_name> ."`
