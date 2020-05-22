@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oyekanmiayo/recipe-app-api.svg?branch=master)](https://travis-ci.org/oyekanmiayo/recipe-app-api)
+
 # recipe-app-api
 I have built this API because I want an easy way to store all the recipes I'm currently learning.
 
