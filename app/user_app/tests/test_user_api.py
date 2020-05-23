@@ -7,6 +7,7 @@ from rest_framework import status
 
 CREATE_USER_URL = reverse('user_app:create')
 AUTHENTICATE_URL = reverse('user_app:authenticate')
+MANAGE_URL = reverse('user_app:manage')
 
 
 def create_user(**params):
@@ -132,3 +133,63 @@ class AuthenticateUserAPITests(TestCase):
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class ManageUserWithoutTokenAPITests(TestCase):
+    """Test managing - view, update, delete -  via APIs without auth"""
+
+    def test_retrieve_user_without_token_unauthorized(self):
+        """Test that users cannot be viewed without a token."""
+        res = self.client.get(MANAGE_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ManageUserWithTokenAPITests(TestCase):
+    """Test managing - view, update, delete -  via APIs. Requires auth"""
+
+    def setUp(self):
+        self.user = create_user(
+            fname='Test',
+            lname='User',
+            email='test@gmail.com',
+            password='testpass'
+        )
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def test_retrieve_user_with_token_successful(self):
+        """Test that users can be viewed when authenticated."""
+        res = self.client.get(MANAGE_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, {
+            'fname': self.user.fname,
+            'lname': self.user.lname,
+            'email': self.user.email
+        })
+
+    def test_post_method_not_allowed_on_manage_url(self):
+        """Test that post is not allowed on manage url."""
+        res = self.client.post(MANAGE_URL, {})
+
+        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_update_user_with_token_successful(self):
+        """
+        Test updating user's profile is successful with authenticated user
+        """
+        payload = {
+            'fname': 'Testing',
+            'lname': 'Userer',
+            'password': 'panda'
+        }
+
+        res = self.client.patch(MANAGE_URL, payload)
+
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.fname, payload['fname'])
+        self.assertEqual(self.user.lname, payload['lname'])
+        self.assertTrue(self.user.check_password(payload['password']))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
