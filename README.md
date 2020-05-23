@@ -10,7 +10,7 @@ To build Dockerfile using docker-compose:
 - `docker-compose build`
 
 To run application:
-- `docker-compose run <service_name> sh -c <django_or_python_command>"`
+- `docker-compose run <service_name> sh -c "<django_or_python_command>"`
 - `docker-compose up`
 
 To create Django App:
@@ -25,3 +25,11 @@ Remember:
 
 To make migrations:
 - `docker-compose run app sh -c "python manage.py makemigrations <app_name>"`
+
+To create superuser:
+- `docker-compose run app sh -c "python manage.py createsuperuser"`
+
+To ensure contains don't linger after any docker-compose command using --rm:
+- `docker-compose run --rm app sh -c "<command>""`
+
+docker-compose run app sh -c "python manage.py runserver 0.0.0.0:8000"
