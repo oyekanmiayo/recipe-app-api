@@ -10,17 +10,26 @@ To build Dockerfile using docker-compose:
 - `docker-compose build`
 
 To run application:
-- `docker-compose run <service_name> sh -c <django_or_python_command>"`
+- `docker-compose run app sh -c "python manage.py runserver 0.0.0.0:8000"`
+- `docker-compose up`
 
-To create Django App:
+To Create Django Project:
 - `docker-compose run app sh -c "django-admin.py startproject <project_name> ."`
+
+To Create Django App
 - `docker-compose run app sh -c "python manage.py startapp <app_name>"`
 
-To run tests and linting:
+To Run Tests and Linting:
 - `docker-compose run app sh -c "python manage.py test && flake8"`
+
+To Make Migrations:
+- `docker-compose run app sh -c "python manage.py makemigrations <app_name>"`
+
+To Create Superuser:
+- `docker-compose run app sh -c "python manage.py createsuperuser"`
 
 Remember:
 - Anytime a requirement is added, `docker-compose build` must be executed
-
-To make migrations:
-- `docker-compose run app sh -c "python manage.py makemigrations <app_name>"`
+- To ensure contains don't linger after any docker-compose command use --rm as an argument \
+in the call like: `docker-compose run --rm app sh -c "<command>""`
+- Use `self.stdout.write()` to print out content in the code 
