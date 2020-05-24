@@ -6,7 +6,9 @@ from core.models import Tag
 from recipe_app import serializers
 
 
-class TagListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class TagViewSet(viewsets.GenericViewSet,
+                 mixins.ListModelMixin,
+                 mixins.CreateModelMixin):
     """List Tags in database"""
 
     authentication_classes = (TokenAuthentication,)
@@ -17,3 +19,7 @@ class TagListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     def get_queryset(self):
         """Return objects for the authenticated user only"""
         return self.queryset.filter(user=self.request.user).order_by('-name')
+
+    def perform_create(self, serializer):
+        """Create a new tag"""
+        return serializer.save(user=self.request.user)
