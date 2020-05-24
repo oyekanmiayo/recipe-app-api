@@ -83,3 +83,19 @@ class TagModelTests(TestCase):
         )
 
         self.assertEqual(str(tag), tag.name)
+
+
+class IngredientModelTests(TestCase):
+
+    def test_ingredients_created_successfully_and_returns_str(self):
+        """
+        Test that default ModelManager creates an ingredient
+        and that it has the correct string representation.
+        """
+
+        ingredient = models.Ingredient.objects.create(
+            user=sample_user(),
+            name='Cucumber'
+        )
+
+        self.assertEqual(str(ingredient), ingredient.name)
