@@ -24,7 +24,7 @@ SECRET_KEY = 'vvslv*_q)_#q@b=&_gvu9hhr=uov=)@r*3y=_7b@^o3d*22)+('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'core',
     'user_app',
+    'recipe_app'
 ]
 
 MIDDLEWARE = [
