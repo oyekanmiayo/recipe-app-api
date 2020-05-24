@@ -32,3 +32,4 @@ Remember:
 - Anytime a requirement is added, `docker-compose build` must be executed
 - To ensure contains don't linger after any docker-compose command use --rm as an argument \
 in the call like: `docker-compose run --rm app sh -c "<command>""`
+- Use `self.stdout.write()` to print out content in the code 

@@ -6,39 +6,33 @@ from core.models import Tag, Ingredient
 from recipe_app import serializers
 
 
-class TagViewSet(viewsets.GenericViewSet,
-                 mixins.ListModelMixin,
-                 mixins.CreateModelMixin):
-    """Manage Tags in the database"""
-
+class BaseViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  mixins.CreateModelMixin):
+    """
+    This class was created because TagViewSet and IngredientViewSet
+    had a lot of common code, so it just makes sense to have it all
+    in one place so that it can be extended.
+    """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = Tag.objects.all()
-    serializer_class = serializers.TagSerializer
 
     def get_queryset(self):
         """Return objects for the authenticated user only."""
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
     def perform_create(self, serializer):
-        """Create a new tag."""
+        """Create a new object."""
         return serializer.save(user=self.request.user)
 
 
-class IngredientViewSet(viewsets.GenericViewSet,
-                        mixins.ListModelMixin,
-                        mixins.CreateModelMixin):
-    """Manage Ingredients in the database"""
+class TagViewSet(BaseViewSet):
+    """Manage Tags in the database."""
+    queryset = Tag.objects.all()
+    serializer_class = serializers.TagSerializer
 
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+
+class IngredientViewSet(BaseViewSet):
+    """Manage Ingredients in the database."""
     queryset = Ingredient.objects.all()
     serializer_class = serializers.IngredientSerializer
-
-    def get_queryset(self):
-        """Return ingredients for users only."""
-        return self.queryset.filter(user=self.request.user).order_by('-name')
-
-    def perform_create(self, serializer):
-        """Create a new tag."""
-        return serializer.save(user=self.request.user)
